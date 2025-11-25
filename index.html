@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Japan Trip Itinerary 🇯🇵</title>
+    <title>도쿄 여행 일정표 🇯🇵</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -20,31 +20,127 @@
 <body>
     <div class="app-container">
         <header class="sticky-header">
-            <h1>Tokyo Trip 🇯🇵</h1>
-            <div class="view-toggle">
-                <button id="btn-list" class="toggle-btn active">List</button>
-                <button id="btn-map" class="toggle-btn">Map</button>
+            <div class="header-top">
+                <h1>도쿄 여행 🇯🇵</h1>
+                <div id="weather-widget" class="weather-widget">
+                    <span id="weather-icon">⛅</span>
+                    <span id="weather-temp">--°C</span>
+                </div>
             </div>
-            <nav class="day-nav">
-                <button class="nav-btn active" data-day="0">Day 1<br><span class="date">11/28</span></button>
-                <button class="nav-btn" data-day="1">Day 2<br><span class="date">11/29</span></button>
-                <button class="nav-btn" data-day="2">Day 3<br><span class="date">11/30</span></button>
-                <button class="nav-btn" data-day="3">Day 4<br><span class="date">12/01</span></button>
-            </nav>
+
+            <!-- Itinerary Nav (Only visible in Itinerary Tab) -->
+            <div id="itinerary-nav" class="nav-section active">
+                <div class="view-toggle">
+                    <button id="btn-list" class="toggle-btn active">리스트</button>
+                    <button id="btn-map" class="toggle-btn">지도</button>
+                </div>
+                <nav class="day-nav">
+                    <button class="nav-btn active" data-day="0">1일차<br><span class="date">11/28</span></button>
+                    <button class="nav-btn" data-day="1">2일차<br><span class="date">11/29</span></button>
+                    <button class="nav-btn" data-day="2">3일차<br><span class="date">11/30</span></button>
+                    <button class="nav-btn" data-day="3">4일차<br><span class="date">12/01</span></button>
+                </nav>
+            </div>
         </header>
 
-        <main id="content-area">
-            <div id="timeline-container" class="timeline-container active">
-                <!-- Timeline items will be injected here by JS -->
-            </div>
-            <div id="map-container" class="map-container">
-                <div id="map"></div>
-            </div>
+        <main id="main-content">
+            <!-- Tab 1: Itinerary -->
+            <section id="tab-itinerary" class="tab-content active">
+                <div id="timeline-container" class="timeline-container active">
+                    <!-- Timeline items injected by JS -->
+                </div>
+                <div id="map-container" class="map-container">
+                    <div id="map"></div>
+                </div>
+            </section>
+
+            <!-- Tab 2: Memories -->
+            <section id="tab-memories" class="tab-content">
+                <div class="mission-card">
+                    <div class="mission-header">
+                        <h3>💖 커플 미션</h3>
+                        <button id="refresh-mission" class="icon-btn">🔄</button>
+                    </div>
+                    <p id="mission-text">오늘의 미션이 곧 공개됩니다!</p>
+                    <button id="complete-mission" class="action-btn">미션 완료!</button>
+                </div>
+
+                <div class="journal-section">
+                    <h3>여행 기록 📸</h3>
+                    <div id="journal-feed" class="journal-feed">
+                        <!-- Journal items injected by JS -->
+                    </div>
+                </div>
+
+                <button id="add-journal-btn" class="fab">+</button>
+            </section>
+
+            <!-- Tab 3: Wallet -->
+            <section id="tab-wallet" class="tab-content">
+                <div class="wallet-summary">
+                    <div class="budget-card">
+                        <p>총 지출</p>
+                        <h2 id="total-spent">¥0</h2>
+                    </div>
+                </div>
+
+                <div class="expense-list-container">
+                    <h3>최근 지출 내역</h3>
+                    <ul id="expense-list" class="expense-list">
+                        <!-- Expenses injected by JS -->
+                    </ul>
+                </div>
+
+                <button id="add-expense-btn" class="fab">+</button>
+            </section>
         </main>
 
-        <footer>
-            <p>Have a nice trip! ✈️</p>
-        </footer>
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <button class="nav-item active" data-tab="itinerary">
+                <span class="icon">📅</span>
+                <span class="label">일정</span>
+            </button>
+            <button class="nav-item" data-tab="memories">
+                <span class="icon">💝</span>
+                <span class="label">추억</span>
+            </button>
+            <button class="nav-item" data-tab="wallet">
+                <span class="icon">💴</span>
+                <span class="label">지갑</span>
+            </button>
+        </nav>
+
+        <!-- Modals -->
+        <div id="journal-modal" class="modal hidden">
+            <div class="modal-content">
+                <h3>새로운 추억 기록</h3>
+                <input type="file" id="journal-image" accept="image/*">
+                <textarea id="journal-input" placeholder="오늘 무슨 일이 있었나요?"></textarea>
+                <div class="modal-actions">
+                    <button id="close-journal" class="cancel-btn">취소</button>
+                    <button id="save-journal" class="save-btn">저장</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="expense-modal" class="modal hidden">
+            <div class="modal-content">
+                <h3>지출 추가</h3>
+                <input type="text" id="expense-desc" placeholder="내용 (예: 라멘)">
+                <input type="number" id="expense-amount" placeholder="금액 (¥)">
+                <select id="expense-category">
+                    <option value="food">식비</option>
+                    <option value="transport">교통</option>
+                    <option value="shopping">쇼핑</option>
+                    <option value="etc">기타</option>
+                </select>
+                <div class="modal-actions">
+                    <button id="close-expense" class="cancel-btn">취소</button>
+                    <button id="save-expense" class="save-btn">저장</button>
+                </div>
+            </div>
+        </div>
     </div>
     <script src="script.js"></script>
 </body>
